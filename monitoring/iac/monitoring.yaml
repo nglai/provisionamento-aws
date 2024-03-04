@@ -1,0 +1,62 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Stack Monitoring DevOps
+
+Parameters:
+  TagsProject:
+    Type: String
+    Default: "Devops"
+  TagsTeam:
+    Type: String
+    Default: "Adatech" 
+  ImageId:
+    Type: String
+    Default: "ami-03c951bbe993ea087"
+
+Resources:
+  # Inicio do recurso SG
+  MonitoringSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for monitoring
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: sg-monitoring
+        - Key: Project
+          Value: !Ref TagsProject
+        - Key: Team
+          Value: !Ref TagsTeam
+  # Inicio do recurso EC2
+  MonitoringInstance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: !Ref ImageId
+      InstanceType: t2.micro
+      SecurityGroups:
+        - !Ref MonitoringSG
+      #IamInstanceProfile:
+      UserData:
+        Fn::Base64:  |
+          #!/bin/bash
+          sudo yum update -y
+          sudo yum install -y docker
+          sudo service docker start
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+      Tags:
+        - Key: Name
+          Value: instance-monitoring
+        - Key: Project
+          Value: !Ref TagsProject
+        - Key: Team
+          Value: !Ref TagsTeam
