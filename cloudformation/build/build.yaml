@@ -9,7 +9,7 @@ Parameters:
   GitHubToken:
     Type: String
     Description: Auth Github
-    Default: ""
+    Default: "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"
   RepositoryECR:
     Type: String
     Description: Repositorio imagem ecr
@@ -40,9 +40,7 @@ Resources:
             pre_build:
               commands:
                 - echo Login AWS ECR...
-                - aws ecr get-login-password --region $AWS_DEFAULT_REGION | \
-                  docker login --password-stdin \
-                  --username AWS "$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+                - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --password-stdin --username AWS "$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
             build:
               commands:
                 - echo Build iniciou em `date`
