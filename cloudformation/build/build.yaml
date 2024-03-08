@@ -9,7 +9,7 @@ Parameters:
   GitHubToken:
     Type: String
     Description: Auth Github
-    Default: "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"
+    Default: ""
   RepositoryECR:
     Type: String
     Description: Repositorio imagem ecr
