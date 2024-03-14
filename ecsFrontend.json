@@ -1,0 +1,94 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "frontend",
+            "image": "devinfrabr/frontend:v-25f688525f6885",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "http",
+                    "containerPort": 3000,
+                    "hostPort": 3000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "APP_PORT",
+                    "value": "3000"
+                },
+                {
+                    "name": "DATABASE_HOST",
+                    "value": "db-app-voting.cwpmioa5u5ej.us-east-1.rds.amazonaws.com"
+                },
+                {
+                    "name": "DATABASE_USER",
+                    "value": "adatech"
+                },
+                {
+                    "name": " DATABASE_PASSWORD",
+                    "value": "P#dokdfo343534ddsa"
+                },
+                {
+                    "name": " DATABASE_NAME",
+                    "value": "votes"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/frontend",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "curl -f http://localhost:3000/ || exit 1"
+                ],
+                "interval": 30,
+                "timeout": 30,
+                "retries": 5,
+                "startPeriod": 10
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "frontend",
+    "executionRoleArn": "arn:aws:iam::682259033721:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "volumes": [],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "runtimePlatform": {
+        "cpuArchitecture": "ARM64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "tags": [
+        {
+            "key": "rule",
+            "value": "container"
+        },
+        {
+            "key": "Name",
+            "value": "frontend"
+        }
+    ]
+}
